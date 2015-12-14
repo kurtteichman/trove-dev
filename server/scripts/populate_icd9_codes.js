@@ -47,11 +47,11 @@ var runupdates = function (db, ids, count, callback) {
     		var cpt_codes = [];
     		var icd9_codes = [];
     		var disease_labels = [];
-    		//console.log(study_icd9_codes_string);
+    		console.log(study_icd9_codes_string);
 
         	if (study_icd9_codes_string != undefined) {
         		//parseCodes(study_icd9_codes);
-				//console.log(study_icd9_codes_string);
+				console.log(study_icd9_codes_string);
 				while (match = regex.exec(study_icd9_codes_string)) {
 					cpt_codes.push(match[1].trim())
 					icd9_codes = icd9_codes.concat(match[2].split(' '));
@@ -68,6 +68,9 @@ var runupdates = function (db, ids, count, callback) {
 				//console.log(icd9_codes);
                 //console.log(disease_labels);
         	}
+
+            //HV 
+            //if (req.body['disease_']) { 
 
             total_count++;
 

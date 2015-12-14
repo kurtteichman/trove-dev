@@ -85,14 +85,19 @@ app.controller('DiseaseCtrl', function ($rootScope, $scope, $http, $location, $t
 
     // retrieves list of studies for disease
     $scope.retrieveDiseaseStudies = function (disease) { 
+        console.log("in retrieveDiseaseStudies");
         $scope.studiesListShowBoolean = true;
         $http.get('/api/studies/' + $scope.currentUser.userId + '/disease/' + encodeURIComponent(disease)).success(function (studiesList) {
+            console.log("studiesList: ");
+            console.log(studiesList);
             for (var i = 0; i < studiesList.length; i++) {
                 studiesList[i].reportHasEdits = (studiesList[i].levenshtein_distance > 0);
                 studiesList[i].showReportBoolean = false;
                 studiesList[i].showReportWithEditsBoolean = false;
             } 
             $scope.studiesList = studiesList;
+            console.log("scope.studiesList: ");
+            console.log($scope.studiesList);
             $timeout(function () {
                 $scope.studiesListMore = document.getElementById('studiesListItems').scrollHeight > $window.innerHeight;
             }, 100);
@@ -177,6 +182,8 @@ app.controller('DiseaseCtrl', function ($rootScope, $scope, $http, $location, $t
         diseaseGoals.getDiseaseNumbers($scope.currentUser.userId, $scope.rotation, true).then(function(data) {
             var diseaseIndex = -1;
             var xScaleMax = 0;
+            console.log("in diseaseGoals - data");
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
                 diseaseIndex = diseaseNames.indexOf(data[i].disease);
                 if (diseaseIndex > -1) {
@@ -188,6 +195,8 @@ app.controller('DiseaseCtrl', function ($rootScope, $scope, $http, $location, $t
                     xScaleMax = data[i].user_number;
                 }
             }
+            console.log("diseaseNumbers");
+            console.log($scope.diseaseNumbers);
             $scope.xScaleMax = xScaleMax;
             $scope.chartLoading = false;
         });

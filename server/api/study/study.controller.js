@@ -40,9 +40,11 @@ function formatReports(studies) {
 exports.allStudiesOnDate = function(req, res) {
     var cache_string = req.params.user + '/ALL/' + req.params.date;
     var lifetime = (new Date(getTodayDateFormatted()).getTime() === new Date(req.params.date).getTime()) ? 21600 : 0; // keep forever in cache if date already past
-    return memcached.get(cache_string, function (err, data) {
+    
+    /*return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (!data || 'setCache' in req) {
+            */
             Study.find({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -56,21 +58,26 @@ exports.allStudiesOnDate = function(req, res) {
                 memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
+        /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(formatReports(data));
         }
+
     });
+    */
 };
 
 // Get all studies between two dates, by currentUser
 exports.allStudiesBetweenDates = function(req, res) {
     var cache_string = req.params.user + '/ALL/' + req.params.startDate + '/' + req.params.endDate;
     var lifetime = (new Date(getTodayDateFormatted()).getTime() >= new Date(req.params.startDate).getTime() && new Date(getTodayDateFormatted()).getTime() <= new Date(req.params.endDate).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (!data || 'setCache' in req) {
-            Study.find({ 
+    */
+            Study.find({
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
                     $gte: (new Date(req.params.startDate).getTime()),
@@ -83,20 +90,24 @@ exports.allStudiesBetweenDates = function(req, res) {
                 memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
+        /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(formatReports(data));
         }
     });
+    */
 };
 
 // Get studies for specified modality on a single date, by currentUser
 exports.modalityStudiesOnDate = function(req, res) {
     var cache_string = req.params.user + '/' + req.params.modality + '/' + req.params.date;
     var lifetime = (new Date(getTodayDateFormatted()).getTime() === new Date(req.params.date).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (!data || 'setCache' in req) {
+    */
             Study.find({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -111,20 +122,24 @@ exports.modalityStudiesOnDate = function(req, res) {
                 memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
+    /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(formatReports(data));
         }
     });
+    */
 };
 
 // Get studies for specified modality between two dates, by currentUser
 exports.modalityStudiesBetweenDates = function(req, res) {
     var cache_string = req.params.user + '/' + req.params.modality + '/' + req.params.startDate + '/' + req.params.endDate;
     var lifetime = (new Date(getTodayDateFormatted()).getTime() >= new Date(req.params.startDate).getTime() && new Date(getTodayDateFormatted()).getTime() <= new Date(req.params.endDate).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (!data || 'setCache' in req) {
+    */
             Study.find({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -139,20 +154,24 @@ exports.modalityStudiesBetweenDates = function(req, res) {
                 memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
+        /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(formatReports(data));
         }
     });
+    */
 };
 
 // Get count of all studies on a single date, by currentUser
 exports.allStudiesOnDateCount = function(req, res) {
     var cache_string = req.params.user + '/ALL/' + req.params.date + '/count';
     var lifetime = (new Date(getTodayDateFormatted()).getTime() === new Date(req.params.date).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if (err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
+    */
             Study.count({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -166,19 +185,23 @@ exports.allStudiesOnDateCount = function(req, res) {
                 memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+        /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 // Get count of all studies between two dates, by currentUser
 exports.allStudiesBetweenDatesCount = function(req, res) {
     var cache_string = req.params.user + '/ALL/' + req.params.startDate + '/' + req.params.endDate + '/count';
     var lifetime = (new Date(getTodayDateFormatted()).getTime() >= new Date(req.params.startDate).getTime() && new Date(getTodayDateFormatted()).getTime() <= new Date(req.params.endDate).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if (typeof data === "undefined" || 'setCache' in req) {
+    */
             Study.count({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -192,19 +215,23 @@ exports.allStudiesBetweenDatesCount = function(req, res) {
                 memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+    /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 // Get count of studies for specified modality on a single date, by currentUser
 exports.modalityStudiesOnDateCount = function(req, res) {
     var cache_string = req.params.user + '/' + req.params.modality + '/' + req.params.date + '/count';
     var lifetime = (new Date(getTodayDateFormatted()).getTime() === new Date(req.params.date).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if (typeof data === "undefined" || 'setCache' in req) {
+    */
             Study.count({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -215,23 +242,27 @@ exports.modalityStudiesOnDateCount = function(req, res) {
             }, function (err, count) {
                 if(err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
-                console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //console.log('setting cache key: ' + cache_string);
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+    /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 // Get count of studies for specified modality between two dates, by currentUser
 exports.modalityStudiesBetweenDatesCount = function(req, res) {
     var cache_string = req.params.user + '/' + req.params.modality + '/' + req.params.startDate + '/' + req.params.endDate + '/count';
     var lifetime = (new Date(getTodayDateFormatted()).getTime() >= new Date(req.params.startDate).getTime() && new Date(getTodayDateFormatted()).getTime() <= new Date(req.params.endDate).getTime()) ? 21600 : 0; // keep forever in cache if date already past
+    /*
     return memcached.get(cache_string, function (err, data) {
         if (typeof data === "undefined" || 'setCache' in req) {
+    */
             Study.count({ 
                 assistant_radiologist: req.params.user,
                 transcribed_time: { 
@@ -246,20 +277,24 @@ exports.modalityStudiesBetweenDatesCount = function(req, res) {
                 memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+    /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 // Get studies with disease label
 exports.diseaseStudies = function(req, res) {
     var cache_string = req.params.user + '/disease/' + encodeURIComponent(req.params.disease).replace('\'', '%27');
     var lifetime = 86400;
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (!data || 'setCache' in req) {
+    */
             var icd9code_array = icd9Mapper(req.params.disease);
             Study.find({ 
                 assistant_radiologist: req.params.user,
@@ -273,21 +308,27 @@ exports.diseaseStudies = function(req, res) {
                 memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
+    /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(formatReports(data));
         }
     });
+    */
 };
 
 // Get count of studies with disease label
 exports.diseaseStudiesCount = function(req, res) {
     var cache_string = req.params.user + '/disease/' + encodeURIComponent(req.params.disease).replace('\'', '%27') + '/count';
     var lifetime = 86400;
+    /*
     return memcached.get(cache_string, function (err, data) {
         if (err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
+    */
             var icd9code_array = icd9Mapper(req.params.disease);
+            console.log("icd9code_array: ");
+            console.log(icd9code_array);
             Study.count({ 
                 assistant_radiologist: req.params.user,
                 icd9_codes: { 
@@ -300,11 +341,13 @@ exports.diseaseStudiesCount = function(req, res) {
                 memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+        /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 
@@ -410,6 +453,8 @@ exports.processHL7JSON = function(req, res) {
 
 
     var result_status = req.body['result_status'];
+    console.log("result_status");
+    console.log(result_status);
 
     var current_study = null;
 
@@ -435,6 +480,8 @@ exports.processHL7JSON = function(req, res) {
         current_study['retro_assistant_radiologist'] = temp_assistant_radiologist_string;
         current_study['retro_radiologist'] = temp_radiologist_string;
         current_study['word_count'] = getWordCount(req.body['report']);
+
+        console.log(temp_assistant_radiologist_string);
 
 
         User.findOne({ 
@@ -488,13 +535,21 @@ exports.processHL7JSON = function(req, res) {
 
             // TODO: Workout better logic regarding how these get updated. As it is, a finalized json could come in before
             // a transcribed json
-            if (result_status == 'P' && parseRadiologistFromReport(req.body['report']) == 'undefined' && req.body['result_time']) {
+            if (req.body['completed_time']) {  //HV change this back to original 12/10/2015
+            //if (result_status == 'P' && parseRadiologistFromReport(req.body['report']) == 'undefined' && req.body['result_time']) {
+            //  if (result_status == 'P' && req.body['result_time']) {
                 var transcribed_date = convertHL7DateToJavascriptDate(req.body['result_time']);
                 current_study['transcribed_report'] = req.body['report'];
                 //console.log(req.body['report']);
                 current_study['transcribed_date'] = transcribed_date;
                 current_study['transcribed_time'] = transcribed_date.getTime();
                 current_study['transcribed_word_count'] = current_study['word_count'];
+            }
+
+            //HV populate disease_labels in database
+            if (req.body['disease_labels']){
+                var disease_labels = req.body['disease_labels'];
+                current_study['disease_labels'] = disease_labels;
             }
 
             if (result_status == 'F' && req.body['result_time']) {
