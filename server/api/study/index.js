@@ -8,6 +8,9 @@ var router = express.Router();
 router.get('/:user/disease/:disease', controller.diseaseStudies);
 router.get('/:user/disease/:disease/count', controller.diseaseStudiesCount);
 
+//router.get('/:user/disease/:disease/countML', controller.getMlDisease);
+
+
 router.get('/:user/ALL/:date', controller.allStudiesOnDate);
 router.get('/:user/ALL/:date/count', controller.allStudiesOnDateCount);
 router.get('/:user/ALL/:startDate/:endDate', controller.allStudiesBetweenDates);

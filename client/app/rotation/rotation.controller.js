@@ -119,7 +119,10 @@ app.controller('RotationCtrl', function ($rootScope, $scope, $http, $location, $
     $scope.currentRotationIndex = -1;
     $http.get('/assets/data/schedulesJSON/' + $scope.currentUser.username + '.json').success(function(schedule) { 
         console.log("schedule");
+        console.log($scope.currentUser.username);
         console.log(schedule);
+        
+
 
         $scope.data.rotations = schedule.slice(Math.max(schedule.length - 104, 0));
 
@@ -141,11 +144,16 @@ app.controller('RotationCtrl', function ($rootScope, $scope, $http, $location, $
         $scope.visibleRotationIndex = $scope.currentRotationIndex;
     });
 
+
+
     // Loads the json file for modality number goals
     $http.get('/assets/data/rotationGoalsModality.json').success(function(data) {
 
         $scope.data.goals = data;
     });
+
+
+
 
     // Boolean for determining if selected rotation has goals
     $scope.isRotationWithoutGoals = false;

@@ -5,6 +5,8 @@ var User = require('./../user/user.model');
 var levenshtein = require('fast-levenshtein');
 var icd9Mapper = require('./../diseaseICD9MapperRegex').map;
 
+var diseaseMapperML = require('./../diseaseArrayMapper').map;
+
 var Memcached = require('memcached');
 var memcached = new Memcached('localhost:11211');
 var fs = require('fs');
@@ -296,10 +298,15 @@ exports.diseaseStudies = function(req, res) {
         if (!data || 'setCache' in req) {
     */
             var icd9code_array = icd9Mapper(req.params.disease);
+            var disease_array = diseaseMapperML(req.params.disease);
+            
             Study.find({ 
                 assistant_radiologist: req.params.user,
-                icd9_codes: { 
-                    $in: icd9code_array
+                // icd9_codes: { 
+                //     $in: icd9code_array
+                // }
+                disease_labels: {
+                    $in: disease_array
                 }
             }, 'modality exam_name transcribed_time transcribed_report report levenshtein_distance', {sort: {transcribed_time: 1}}, function (err, studies) {
                 if(err) { return handleError(res, err); }
@@ -327,20 +334,41 @@ exports.diseaseStudiesCount = function(req, res) {
         if (typeof data === "undefined" || 'setCache' in req) {
     */
             var icd9code_array = icd9Mapper(req.params.disease);
-            console.log("icd9code_array: ");
-            console.log(icd9code_array);
+            var disease_array = diseaseMapperML(req.params.disease);
+
+            console.log("diseaseMapperML");
+            console.log(diseaseMapperML(req.params.disease));
+           // icd9code_array = [ /565/, /"SBO"/ ];
+           // console.log("updated icd9code_array");
+          //  console.log(icd9code_array);
+           // console.log(req.params.disease_labels_hv);
             Study.count({ 
                 assistant_radiologist: req.params.user,
-                icd9_codes: { 
-                    $in: icd9code_array
+                disease_labels: { 
+              //  icd9_codes: {
+                 //   $in: [/SBO/]
+                    $in: disease_array
+              //      $in: icd9code_array
                 }
+
+               
+
             }, function (err, count) {
                 if (err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
                 console.log('setting cache key: ' + cache_string);
                 memcached.set(cache_string, count, lifetime, function (err) { });
+                //count = 0;
+              //  console.log("count");
+               // console.log(count);
                 return res.json(count);
+
+
             });
+                //console.log("Study.count: ");
+                //console.log(Study.count);
+                //console.log("assistant_radiologist:");
+                //console.log(assistant_radiologist);
         /*
         } else {
             console.log('getting cache key: ' + cache_string);
@@ -350,6 +378,32 @@ exports.diseaseStudiesCount = function(req, res) {
     */
 };
 
+// HV Get ML disease label
+
+// exports.getMlDisease = function(req, res) {
+//     var cache_string = req.params.user + '/disease/' + encodeURIComponent(req.params.disease).replace('\'', '%27') + '/countML';
+//     var lifetime = 86400;
+
+//             var icd9code_array = icd9Mapper(req.params.disease);
+
+
+//             Study.count({ 
+//                 assistant_radiologist: req.params.user,
+//                 icd9_codes: { 
+//                     $in: icd9code_array
+//                 }             
+
+//             }, function (err, count) {
+//                 if (err) { return handleError(res, err); }
+//                 if (typeof count === "undefined") { count = 0; }
+//                 console.log('setting cache key: ' + cache_string);
+//                 memcached.set(cache_string, count, lifetime, function (err) { });
+//                 //count = 2;
+//                 console.log("MLcount: ");
+//                 console.log(count);
+//                 return res.json(count);
+//             });
+// };
 
 
 exports.processHL7JSON = function(req, res) {
@@ -456,6 +510,10 @@ exports.processHL7JSON = function(req, res) {
     console.log("result_status");
     console.log(result_status);
 
+    // var disease_label_from_db = req.body['disease_labels'];
+    // console.log("disease_label_from_db");
+    // console.log(disease_label_from_db);
+
     var current_study = null;
 
     Study.findOne({
@@ -474,7 +532,7 @@ exports.processHL7JSON = function(req, res) {
             temp_assistant_radiologist_string = parseAssistantRadiologistFromReport(req.body['report']);
         }
 
-        console.log(req.body);
+        //console.log(req.body);
 
         // Adding this to retroactively populate studies for users who have not been yet added to the db
         current_study['retro_assistant_radiologist'] = temp_assistant_radiologist_string;
@@ -540,7 +598,8 @@ exports.processHL7JSON = function(req, res) {
             //  if (result_status == 'P' && req.body['result_time']) {
                 var transcribed_date = convertHL7DateToJavascriptDate(req.body['result_time']);
                 current_study['transcribed_report'] = req.body['report'];
-                //console.log(req.body['report']);
+                console.log("report");
+                console.log(req.body['report']);
                 current_study['transcribed_date'] = transcribed_date;
                 current_study['transcribed_time'] = transcribed_date.getTime();
                 current_study['transcribed_word_count'] = current_study['word_count'];
@@ -551,6 +610,15 @@ exports.processHL7JSON = function(req, res) {
                 var disease_labels = req.body['disease_labels'];
                 current_study['disease_labels'] = disease_labels;
             }
+
+             if (req.body['icd9_codes']){
+                 var icd9_codes = req.body['icd9_codes'];
+                 current_study['icd9_codes'] = icd9_codes;
+               // console.log("icd9_codes");
+              //   console.log("icd9_codes_hv");
+             }
+          //  console.log("icd9_codes_hv");
+          //  console.log(icd9_codes_hv);
 
             if (result_status == 'F' && req.body['result_time']) {
                 var finalized_date = convertHL7DateToJavascriptDate(req.body['result_time']);
@@ -568,9 +636,9 @@ exports.processHL7JSON = function(req, res) {
                 //console.log(processed_f_trascribed_report);
                 var dist = calcLevenshteinDist(output_reports['f_finalized_report'], processed_f_trascribed_report);
                 if (dist > 0) {
-                    console.log(dist);
-                    console.log(output_reports['f_finalized_report']);
-                    console.log(processed_f_trascribed_report);
+                  //  console.log(dist);
+                   // console.log(output_reports['f_finalized_report']);
+                   // console.log(processed_f_trascribed_report);
                 }
                 //console.log(dist);
                 //console.log(dist);

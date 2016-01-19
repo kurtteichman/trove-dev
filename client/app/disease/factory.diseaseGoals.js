@@ -8,6 +8,8 @@ app.factory('diseaseGoals', function ($http, $q) {
         getDiseaseNumbers: function(userId, rotation, update_user_numbers) {
             // Loads the json file for disease number goals
             return $http.get('/assets/data/rotationGoalsDisease.json').then(function(results) {
+                console.log("results");
+                console.log(results.data);
 
                 var diseaseNumbers = [];
 
@@ -30,10 +32,11 @@ app.factory('diseaseGoals', function ($http, $q) {
                     }*/
                     var deferred = $q.defer();
                     $q.all(diseaseNumbers.map(function (diseaseObj) {
-                            console.log('diseaseObj');
-                            console.log(diseaseObj);
+                            //console.log('diseaseObj');
+                            //console.log(diseaseObj);
                             //return ['SBO'];
-                            console.log($http.get('/api/studies/' + userId + '/disease/' + encodeURIComponent(diseaseObj.disease).replace('\'', '%27') + '/count'));
+                            //console.log($http.get('/api/studies/' + userId + '/disease/' + encodeURIComponent(diseaseObj.disease).replace('\'', '%27') + '/count'));
+                            //return $http.get('/api/studies/' + userId + '/disease/' + encodeURIComponent(diseaseObj.disease).replace('\'', '%27') + '/count');
                             return $http.get('/api/studies/' + userId + '/disease/' + encodeURIComponent(diseaseObj.disease).replace('\'', '%27') + '/count');
                         })).then(function (results) {
                             var updatedDiseaseNumbers = diseaseNumbers

@@ -31,6 +31,8 @@ var getids = function (db, callback) {
 
 var found_count = 0;
 var	total_count = 0; 
+console.log("total_count");
+console.log(total_count);
 //console.log(study_icd9_codes);
 var regex = /(.*?)\{(.*?)\}/g;
 
@@ -47,32 +49,35 @@ var runupdates = function (db, ids, count, callback) {
     		var cpt_codes = [];
     		var icd9_codes = [];
     		var disease_labels = [];
-    		console.log(study_icd9_codes_string);
+           // console.log("study_icd9_codes_string");
+    		//console.log(study_icd9_codes_string);
 
         	if (study_icd9_codes_string != undefined) {
         		//parseCodes(study_icd9_codes);
-				console.log(study_icd9_codes_string);
+              //  console.log("study_icd9_codes_string");
+			  //  console.log(study_icd9_codes_string);
 				while (match = regex.exec(study_icd9_codes_string)) {
 					cpt_codes.push(match[1].trim())
 					icd9_codes = icd9_codes.concat(match[2].split(' '));
 				}
 				cpt_codes = _.uniq(cpt_codes);
 				icd9_codes = _.uniq(icd9_codes)
+               // icd9_codes = [ /560/];
                 for (var i = 0; i < icd9_codes.length; i++) {
                     disease_labels.push(icd9ToDiseaseMapper.map(icd9_codes[i]));
                 }
                 disease_labels = _.uniq(disease_labels);
-
                 found_count++;
+               // found_count = 4;
 				//console.log(cpt_codes);
 				//console.log(icd9_codes);
                 //console.log(disease_labels);
         	}
 
-            //HV 
-            //if (req.body['disease_']) { 
+ 
 
             total_count++;
+
 
 			db.collection('studies').update({'_id': new ObjectID(id._id.toString())}, {$set:{'icd9_codes' : icd9_codes,'cpt_codes':cpt_codes,'disease_labels':disease_labels}}, function (err, update) {
                 if (err) {

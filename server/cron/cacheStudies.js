@@ -55,6 +55,9 @@ new CronJob('00 30 02 * * *', function() {
     }
 }, null, true);
 
+
+
+
 /**
 * Caches modalityStudiesBetweenDatesCount
 */
