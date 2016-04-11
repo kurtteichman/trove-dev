@@ -57,7 +57,7 @@ exports.allStudiesOnDate = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if(!studies) { return res.send(404); }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, studies, lifetime, function (err) { });
+                //memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
         /*
@@ -89,7 +89,7 @@ exports.allStudiesBetweenDates = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if(!studies) { return res.send(404); }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, studies, lifetime, function (err) { });
+                //memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
         /*
@@ -121,7 +121,7 @@ exports.modalityStudiesOnDate = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if(!studies) { return res.send(404); }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, studies, lifetime, function (err) { });
+                //memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
     /*
@@ -153,7 +153,7 @@ exports.modalityStudiesBetweenDates = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if(!studies) { return res.send(404); }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, studies, lifetime, function (err) { });
+                //memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
         /*
@@ -184,7 +184,7 @@ exports.allStudiesOnDateCount = function(req, res) {
                 if (err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
         /*
@@ -214,7 +214,7 @@ exports.allStudiesBetweenDatesCount = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
     /*
@@ -276,7 +276,7 @@ exports.modalityStudiesBetweenDatesCount = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
     /*
@@ -312,7 +312,7 @@ exports.diseaseStudies = function(req, res) {
                 if(err) { return handleError(res, err); }
                 if(!studies) { return res.send(404); }
                 console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, studies, lifetime, function (err) { });
+                //memcached.set(cache_string, studies, lifetime, function (err) { });
                 return res.json(formatReports(studies));
             });
     /*
@@ -356,8 +356,8 @@ exports.diseaseStudiesCount = function(req, res) {
             }, function (err, count) {
                 if (err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
-                console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //console.log('setting cache key: ' + cache_string);
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 //count = 0;
               //  console.log("count");
                // console.log(count);
