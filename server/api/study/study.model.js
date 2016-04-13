@@ -17,7 +17,7 @@ var StudySchema = mongoose.Schema({
     accession : { type: String, default: null },
     // retro fields for for when we retroactively assign assistant_radiologist keys
     // as well as radiologist keys from our user collection
-    assistant_radiologist : { type: Number, default: null },
+    assistant_radiologist : { type: Number, default: null, index:true },
     retro_assistant_radiologist : { type: String, default: null},
     radiologist : { type: Number, default: null },
     retro_radiologist : { type: String, default: null },
