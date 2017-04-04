@@ -21,16 +21,20 @@
         <div id="rotation-goals" class="row">
             <div class="section-label">Goals</div>
             <div class="rotation-nogoals-msg" ng-style="{'height': rotationGoalsDivHeight() + 'px', 'line-height': rotationGoalsDivHeight() + 'px'}" ng-if="isRotationWithoutGoals">No goals  available for this rotation.</div>
+            <!--
             <modality-goal modality="CT"></modality-goal>
             <modality-goal modality="XR"></modality-goal>
             <modality-goal modality="MRI"></modality-goal>
             <modality-goal modality="FLUORO"></modality-goal>
             <modality-goal modality="US"></modality-goal>
             <modality-goal modality="NM"></modality-goal>
+            -->
         </div>
         <div id="rotation-summary" class="row">
             <div class="section-label">All Studies</div>
+            <!--
             <modality-pie-chart id="rotation-summary-pie"></modality-pie-chart>
+            -->
             <weekly-numbers-chart id="rotation-summary-numbers"></weekly-numbers-chart>
         </div>
     </div>
