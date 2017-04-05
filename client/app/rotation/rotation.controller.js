@@ -119,16 +119,16 @@ app.controller('RotationCtrl', function ($rootScope, $scope, $http, $location, $
     $scope.data.rotations = null;
     $scope.currentRotationIndex = -1;
     $http.get('/assets/data/schedulesJSON/' + $scope.currentUser.username + '.json').success(function(schedule) { 
-        console.log("schedule");
-        console.log(schedule);
+        //console.log("schedule");
+        //console.log(schedule);
         $scope.data.rotations = schedule.slice(Math.max(schedule.length - 104, 0));
 
         // determine what the user's current rotation is based on current date
         $scope.data.rotations.some(function (rotation, index) {
             var startDate = new Date(rotation.rotationDates.split('-')[0]);
             var endDate = new Date(rotation.rotationDates.split('-')[1]);
-            console.log(startDate);
-            console.log(endDate);
+            //console.log(startDate);
+            //console.log(endDate);
             endDate.setDate(endDate.getDate() + 1);
             var dateNow = new Date();
             if (dateNow >= startDate && dateNow < endDate) {
@@ -140,14 +140,17 @@ app.controller('RotationCtrl', function ($rootScope, $scope, $http, $location, $
         });
 
         // as default, sets the selected rotation as the current rotation
-        $scope.visibleRotationIndex = $scope.currentRotationIndex;
+        //$scope.visibleRotationIndex = $scope.currentRotationIndex;
+        $scope.setVisibleRotation($scope.currentRotationIndex);
+        console.log($scope.currentRotationIndex);
+        console.log($scope.visibleRotationIndex);
     });
 
 
 
     // Loads the json file for modality number goals
     $http.get('/assets/data/rotationGoalsModality.json').success(function(data) {
-
+        console.log(data);
         $scope.data.goals = data;
     });
 

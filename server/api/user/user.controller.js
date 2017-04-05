@@ -4,8 +4,8 @@ var User = require('./user.model');
 var Study = require('../study/study.model');
 var badges = require('./badges');
 
-var Memcached = require('memcached');
-var memcached = new Memcached('localhost:11211');
+//var Memcached = require('memcached');
+//var memcached = new Memcached('localhost:11211');
 
 exports.getInfo = function (req, res) {
     User.findOne({ 
@@ -49,23 +49,26 @@ exports.getMinnies = function (req, res) {
     var cache_string = req.params.username + '/minnies';
     var lifetime = 86340;
     
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
+            */
             User.findOne({ 
                 username: req.params.username
             }, 'minnies', function (err, user) {
                 if(err) { return handleError(res, err); }
                 if(!user) { return res.send(404); }
-                console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, user.minnies, lifetime, function (err) { });
+                //memcached.set(cache_string, user.minnies, lifetime, function (err) { });
                 return res.json(user.minnies);
             });
+            /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 exports.updateBadges = function (req, res) {
@@ -89,23 +92,26 @@ exports.getBadges = function (req, res) {
     var cache_string = req.params.username + '/badges';
     var lifetime = 86340;
     
+    /*
     return memcached.get(cache_string, function (err, data) {
         if(err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
+            */
             User.findOne({ 
                 username: req.params.username
             }, 'badges', function (err, user) {
                 if(err) { return handleError(res, err); }
                 if(!user) { return res.send(404); }
-                console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, user.badges, lifetime, function (err) { });
+                //memcached.set(cache_string, user.badges, lifetime, function (err) { });
                 return res.json(user.badges);
             });
+            /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 // Get count of all studies on a single date, by currentUser
@@ -163,10 +169,12 @@ exports.getNumberForACGME = function (req, res) {
             break;
     }
 
+    /*
     return memcached.get(cache_string, function (err, data) {
         var criteria = {};
         if (err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
+            */
 
             if (modalities.length === 0) {
                 criteria = {
@@ -184,15 +192,16 @@ exports.getNumberForACGME = function (req, res) {
             Study.count(criteria, function (err, count) {
                 if (err) { return handleError(res, err); }
                 if (typeof count === "undefined") { count = 0; }
-                console.log('setting cache key: ' + cache_string);
-                memcached.set(cache_string, count, lifetime, function (err) { });
+                //memcached.set(cache_string, count, lifetime, function (err) { });
                 return res.json(count);
             });
+            /*
         } else {
             console.log('getting cache key: ' + cache_string);
             return res.json(data);
         }
     });
+    */
 };
 
 function handleError(res, err) {

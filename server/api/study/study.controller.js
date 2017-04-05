@@ -7,8 +7,6 @@ var icd9Mapper = require('./../diseaseICD9MapperRegex').map;
 
 var diseaseMapperML = require('./../diseaseArrayMapper').map;
 
-var Memcached = require('memcached');
-var memcached = new Memcached('localhost:11211');
 var fs = require('fs');
 
 
