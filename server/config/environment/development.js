@@ -5,6 +5,7 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/trove-dev'
+    uri: process.env.MONGODB_PORT_27017_TCP_ADDR + ":" + process.env.MONGODB_PORT_27017_TCP_PORT + '/trove-dev' ||
+	'mongodb://localhost/trove-dev'
   }
 };
