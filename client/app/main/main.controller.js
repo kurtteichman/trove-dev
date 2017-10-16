@@ -9,8 +9,8 @@ app.controller('MainCtrl', function ($rootScope, $scope, $location, $http) {
     $scope.login = function() {
         //shm2024
         
-        $http.get('/api/users/shm2024/info').success(function (user) {
-            console.log(user);
+        $http.get('/api/users/' + $scope.username + '/info').success(function (user) {
+            //console.log(user);
             $rootScope.currentUser = user;
             $location.path('/dashboard/rotation');
         });
