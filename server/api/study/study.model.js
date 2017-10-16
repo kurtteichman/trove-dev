@@ -19,7 +19,7 @@ var StudySchema = mongoose.Schema({
     // as well as radiologist keys from our user collection
     assistant_radiologist : { type: Number, default: null, index:true },
     retro_assistant_radiologist : { type: String, default: null},
-    radiologist : { type: Number, default: null },
+    radiologist : { type: Number, default: null, index:true },
     retro_radiologist : { type: String, default: null },
 
     report : { type: String, default: null },
