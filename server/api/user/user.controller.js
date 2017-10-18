@@ -169,9 +169,9 @@ exports.getNumberForACGME = function (req, res) {
             break;
     }
 
+    var criteria = {};
     /*
     return memcached.get(cache_string, function (err, data) {
-        var criteria = {};
         if (err) { return handleError(res, err); }
         if (typeof data === "undefined" || 'setCache' in req) {
             */

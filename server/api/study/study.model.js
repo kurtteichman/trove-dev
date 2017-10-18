@@ -14,7 +14,7 @@ var StudySchema = new Schema({
 */
 
 var StudySchema = mongoose.Schema({
-    accession : { type: String, default: null },
+    accession : { type: String, default: null, index:true },
     // retro fields for for when we retroactively assign assistant_radiologist keys
     // as well as radiologist keys from our user collection
     assistant_radiologist : { type: Number, default: null, index:true },
@@ -43,8 +43,8 @@ var StudySchema = mongoose.Schema({
     last_result_time: { type: Number, default: null },
     completed_time: { type: Number, default: null },
     scheduled_time: { type: Number, default: null },
-    transcribed_time: { type: Number, default: null },
-    finalized_time: { type: Number, default: null },
+    transcribed_time: { type: Number, default: null, index:true },
+    finalized_time: { type: Number, default: null, index:true },
 
     last_result_date : { type : Date, default: null },
     observation_start_date : { type : Date, default: null },
